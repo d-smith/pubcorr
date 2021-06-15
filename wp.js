@@ -4,9 +4,16 @@ const { v4: uuidv4 } = require('uuid');
 
 let topic_arn = process.env.TOPIC_ARN;
 
+const winston = require('winston');
+const logger = winston.createLogger({
+    transports: [
+        new winston.transports.Console()
+    ]
+});
+
 
 const wrapPub = async (event) => {
-    console.log(event);
+    logger.info(event);
 
     let cloudEvent = {
         id: uuidv4(),
@@ -17,9 +24,8 @@ const wrapPub = async (event) => {
         time: new Date().toISOString()
     }
 
-    console.log(cloudEvent);
+    logger.info(cloudEvent);
 
-    console.log(topic_arn);
 
     try {
         let snsParams = {
@@ -28,7 +34,6 @@ const wrapPub = async (event) => {
         };
 
         let response = await sns.publish(snsParams).promise();
-        console.log(response);
 
         pubContext = {
             PublishContext: {
@@ -37,14 +42,14 @@ const wrapPub = async (event) => {
             }
         };
 
-        console.log(JSON.stringify(pubContext));
+        logger.info(pubContext);
 
         return {
             statusCode: 200,
             body: "ok"
         };
     } catch(err) {
-        console.log(err);
+        logger.warn(err);
         return {
             statusCode: 500,
             body: "not ok"
