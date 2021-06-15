@@ -2,7 +2,17 @@ service: wrap-and-pub
 
 provider:
   name: aws
+  stage: ${opt:stage, 'dev'}
   runtime: nodejs12.x
+  environment:
+    TOPIC_NAME: t1-${opt:stage, self:provider.stage}
+    QUEUE_NAME: q1-${opt:stage, self:provider.stage}
+    TOPIC_ARN: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:t1-dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource: ${self:provider.environment.TOPIC_ARN}
   apiKeys:
     - wp-api-keyi-${opt:stage, self:provider.stage}
   usagePlan:
@@ -18,3 +28,14 @@ functions:
           path: wp/{topic}
           method: post
           private: true
+
+resources:
+  Resources:
+    sampleTopic:
+      Type: 'AWS::SNS::Topic'
+      Properties:
+        TopicName: ${self:provider.environment.TOPIC_NAME}
+ 
+
+plugins:
+  - serverless-pseudo-parameters
