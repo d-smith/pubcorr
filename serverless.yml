@@ -1,0 +1,20 @@
+service: wrap-and-pub
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  apiKeys:
+    - wp-api-keyi-${opt:stage, self:provider.stage}
+  usagePlan:
+    throttle:
+      burstLimit: 10
+      rateLimit: 1
+
+functions:
+  wrapPub:
+    handler: wp.wrapPub
+    events:
+      - http:
+          path: wp/{topic}
+          method: post
+          private: true
