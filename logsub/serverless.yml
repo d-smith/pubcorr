@@ -1,0 +1,19 @@
+service: log-filter-sub
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs12.x
+
+functions:
+  
+  logProcessor:
+    handler: logprocessor.handler
+    events:
+      - cloudwatchLog:
+          logGroup: '/aws/lambda/wrap-and-pub-${opt:stage, self:provider.stage}-wrapPub'
+          filter: 'PublishContext'
+
+
+
+ 

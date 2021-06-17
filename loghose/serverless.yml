@@ -1,0 +1,38 @@
+service: loghose
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs12.x
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource: ${self:provider.environment.TOPIC_ARN}
+
+functions:
+  wrapPub:
+    handler: wp.wrapPub
+    events:
+      - http:
+          path: wp/{topic}
+          method: post
+  
+
+
+resources:
+  Resources:
+    sampleTopic:
+      Type: 'AWS::SNS::Topic'
+      Properties:
+        TopicName: ${self:provider.environment.TOPIC_NAME}
+    secondTopic:
+      Type: 'AWS::SNS::Topic'
+      Properties:
+        TopicName: ${self:provider.environment.TOPIC_NAME}-2
+
+ 
+
+plugins:
+  - serverless-pseudo-parameters
