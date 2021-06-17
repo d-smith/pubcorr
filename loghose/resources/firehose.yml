@@ -1,0 +1,68 @@
+Resources:
+  FirehoseDeliveryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:service}-${self:custom.stage}-firehose-delivery-role
+      AssumePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action: 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                'sts:ExternalId' : !Ref 'AWS::AccountId'
+
+  FirehoseDeliveryToS3Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: {self:service}-${self:custom.stage}-firehose-delivery-to-s3-policy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:AbortMultipartUpload
+              - s3:GetBucketLocation
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:ListBucketMultipartUploads
+              - s3:PutObject
+            Resource:
+                - !Sub 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}'
+                - !Sub 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}*'
+      Roles:
+        - !Ref FirehoseDeliveryRole
+
+  FirehoseInvokeLambdaPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: ${self:service}-${self:custom.stage}-firehose-invoke-lambda-policy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'lambda:InvokeFunction'
+            Resource: 
+              - !GetAtt TransformLambdaFunction.Arn
+      Roles:
+        - !Ref FirehoseDeliveryRole
+
+  FirehoseDeliveryStream:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamName: ${self:service}-${self:custom.stage}-firehose-delivery-stream
+      ExtendedS3DestinationConfiguration:
+        BucketARN: !Sub 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}'
+        BufferingHints:
+          IntervalInSeconds: 60
+          SizeInMBs: 3
+        CompressionFormat: UNCOMPRESSED
+        Prefix: firehose/
+        RoleARN: !GetAtt FirehoseDeliveryRole.Arn
+        ProcessingConfiguration:
+          Enabled: true
+          Processors:
+            - Parameters:
+                - ParameterName: LambdaArn
+                  ParameterValue: !GetAtt TransformLambdaFunction.Arn 
+              Type: Lambda

@@ -29,12 +29,7 @@ functions:
           method: post
           private: true
   
-  logProcessor:
-    handler: logprocessor.handler
-    events:
-      - cloudwatchLog:
-          logGroup: '/aws/lambda/wrap-and-pub-${opt:stage, self:provider.stage}-wrapPub'
-          filter: 'PublishContext'
+
 
 resources:
   Resources:
