@@ -1,0 +1,27 @@
+Resources:
+  LogsDeliveryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:service}-${self:custom.stage}-logs-delivery-role
+      AssumeRolePolicyDocument:
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: logs.#{AWS::Region}.amazonaws.com
+            Action: 'sts:AssumeRole'
+            
+
+  LogsDeliveryPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: ${self:service}-${self:custom.stage}-logs-delivery-to-firehose-policy
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - firehose:*
+            Resource:
+                - Fn::Sub: 'arn:aws:firehose:#{AWS::Region}:#{AWS::AccountId}:*'
+      Roles:
+        - Ref: LogsDeliveryRole

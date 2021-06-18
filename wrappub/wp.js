@@ -38,7 +38,8 @@ const wrapPub = async (event) => {
         pubContext = {
             PublishContext: {
                 EventId: cloudEvent.id,
-                MessageId: response.MessageId
+                MessageId: response.MessageId,
+                EventType: cloudEvent.type
             }
         };
 

@@ -3,20 +3,22 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: ${self:service}-${self:custom.stage}-firehose-delivery-role
-      AssumePolicyDocument:
+      AssumeRolePolicyDocument:
         Statement:
-          - Effect: Allow
+          - Sid: ''
+            Effect: Allow
             Principal:
               Service: firehose.amazonaws.com
             Action: 'sts:AssumeRole'
             Condition:
               StringEquals:
-                'sts:ExternalId' : !Ref 'AWS::AccountId'
+                'sts:ExternalId': 
+                  Ref: 'AWS::AccountId'
 
   FirehoseDeliveryToS3Policy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: {self:service}-${self:custom.stage}-firehose-delivery-to-s3-policy
+      PolicyName: ${self:service}-${self:custom.stage}-firehose-delivery-to-s3-policy
       PolicyDocument:
         Statement:
           - Effect: Allow
@@ -28,10 +30,10 @@ Resources:
               - s3:ListBucketMultipartUploads
               - s3:PutObject
             Resource:
-                - !Sub 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}'
-                - !Sub 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}*'
+                - Fn::Sub: 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}'
+                - Fn::Sub: 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}*'
       Roles:
-        - !Ref FirehoseDeliveryRole
+        - Ref: FirehoseDeliveryRole
 
   FirehoseInvokeLambdaPolicy:
     Type: AWS::IAM::Policy
@@ -43,26 +45,30 @@ Resources:
             Action:
               - 'lambda:InvokeFunction'
             Resource: 
-              - !GetAtt TransformLambdaFunction.Arn
+              - Fn::GetAtt: TransformLambdaFunction.Arn
       Roles:
-        - !Ref FirehoseDeliveryRole
+        - Ref: FirehoseDeliveryRole
 
   FirehoseDeliveryStream:
     Type: AWS::KinesisFirehose::DeliveryStream
     Properties:
       DeliveryStreamName: ${self:service}-${self:custom.stage}-firehose-delivery-stream
       ExtendedS3DestinationConfiguration:
-        BucketARN: !Sub 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}'
+        BucketARN: 
+          Fn::Sub: 'arn:aws:s3:::${self:custom.S3BucketNameForFirehoseDestination}'
         BufferingHints:
           IntervalInSeconds: 60
           SizeInMBs: 3
         CompressionFormat: UNCOMPRESSED
-        Prefix: firehose/
-        RoleARN: !GetAtt FirehoseDeliveryRole.Arn
+        ErrorOutputPrefix: error/pubrecord/!{firehose:error-output-type}/year=!{timestamp:YYYY}/month=!{timestamp:MM}/day=!{timestamp:dd}/
+        Prefix: pubrecord/year=!{timestamp:YYYY}/month=!{timestamp:MM}/day=!{timestamp:dd}/
+        RoleARN: 
+          Fn::GetAtt: FirehoseDeliveryRole.Arn
         ProcessingConfiguration:
           Enabled: true
           Processors:
             - Parameters:
                 - ParameterName: LambdaArn
-                  ParameterValue: !GetAtt TransformLambdaFunction.Arn 
+                  ParameterValue: 
+                    Fn::GetAtt: TransformLambdaFunction.Arn 
               Type: Lambda

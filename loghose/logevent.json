@@ -1,0 +1,12 @@
+{
+    "invocationId": "f14ccd6e-2754-4528-a0ed-e5e4a9842ec3",
+    "deliveryStreamArn": "arn:aws:firehose:us-east-1:012301230123:deliverystream/loghose-dev-firehose-delivery-stream",
+    "region": "us-east-1",
+    "records": [
+        {
+            "recordId": "49619329038158993429557085016903788493510130216789344258000000",
+            "approximateArrivalTimestamp": 1624045883140,
+            "data": "H4sIAAAAAAAAAKWUTWskRwyG/0uTo4uRVCqV5JtJnCWQhYB92zGhPjcD45lhpm0nGP/3VI+zl8V7CNPQ0HqrpVf1tKpfp8d2OqWv7f6fQ5uup19u7m/+/Hx7d3fz6Xa6mvYvu3YcMlNUVqEIqkPe7r9+Ou6fDmNllV5Oq216zDWtXo7p4NKuusNTdrU9u0X44ym/Z9zNx5YeRwoB4Qpkhbr68tPvN/e3d/cPsVZpPWD0SqxImQFqh4DWqvS6mJ6e8qkcN4d5s9/9utnO7Xiarr9Mi1fZ7+b29+z6WZ4ezn63z203L6+8Tps6bL0QRvbjAo4BvVcIwYjQSCwAhRBABIlCRA2Bxo3qvQ3reTMozelxbBiFGDhoVGG7+kZvlH9dfwvW0/UIxr63m9NfP7+39q6dW/qtjmA9sS9MlcTlUrrjZuryKO0kZ7CCKTQp6+lqPX1+r/pfmolQTQCu9p5cYA0uqwSnnkdnWipoPKedvZavek6bcT29vQ15257b9ixtdn0/xPVuerv6HhFHEQNQH7wE82QRx8aXRw1jnQeAEMWbMBoo/gCRMcEliErvPVoVV1IQxzFVp9GLk5bYvORkEj9AlDRXrhZdgVRcUCoudzKHXNHnmnsL5XJEspwHVTLASMIMGHwcE+RHQIHFcxjYAkSPpuQ/RqSAhpcgyom8qQ1EY4Icq5pLxktIxmNWUq3tA0TIo73UkuOeowvQmkupFQc+lcyltwhyOSL1hMuQEABixNGSGS1cxukB82E0qihGtvwRLP4AEQLyJYikQR8myXlRcJyxOCspOSLz2Fii4EeICLqiCrgWM7iADcfwqXeMJFiKsW/9fyN6ePsXHbPkEXEFAAA="
+        }
+    ]
+}

@@ -1,38 +1,34 @@
 service: loghose
 
+custom:
+  stage: ${opt:stage, 'dev'}
+  serviceName: loghose
+  S3BucketNameForFirehoseDestination: ${self:service}-${self:custom.stage}-firehose-destination
+
+
 provider:
   name: aws
-  stage: ${opt:stage, 'dev'}
+  stage: dev
   runtime: nodejs12.x
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - sns:Publish
-      Resource: ${self:provider.environment.TOPIC_ARN}
+#  iamRoleStatements:
+#    - Effect: Allow
+#      Action:
+#        - sts:AssumeRole
 
 functions:
-  wrapPub:
-    handler: wp.wrapPub
-    events:
-      - http:
-          path: wp/{topic}
-          method: post
+  transform:
+    handler: handler.transform
+    name: ${self:service}-${self:custom.stage}-data-transform-lambda
+    timeout: 60
   
 
 
 resources:
-  Resources:
-    sampleTopic:
-      Type: 'AWS::SNS::Topic'
-      Properties:
-        TopicName: ${self:provider.environment.TOPIC_NAME}
-    secondTopic:
-      Type: 'AWS::SNS::Topic'
-      Properties:
-        TopicName: ${self:provider.environment.TOPIC_NAME}-2
+  - ${file(resources/s3-bucket.yml)}
+  - ${file(resources/firehose.yml)}
+  - ${file(resources/logs.yml)}
 
  
-
 plugins:
   - serverless-pseudo-parameters
