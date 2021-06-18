@@ -23,6 +23,51 @@ aws firehose put-record \
 serverless invoke local --function transform --path ./logevent.json 
 
 
+aws glue get-crawler --name message-delivery-crawler
+
+{
+    "Crawler": {
+        "Name": "message-delivery-crawler",
+        "Role": "service-role/AWSGlueServiceRole-loghose",
+        "Targets": {
+            "S3Targets": [
+                {
+                    "Path": "s3://loghose-dev-firehose-destination/pubrecord",
+                    "Exclusions": []
+                }
+            ],
+            "JdbcTargets": [],
+            "MongoDBTargets": [],
+            "DynamoDBTargets": [],
+           "CatalogTargets": []
+        },
+        "DatabaseName": "cedb",
+        "Classifiers": [],
+        "RecrawlPolicy": {
+            "RecrawlBehavior": "CRAWL_NEW_FOLDERS_ONLY"
+        },
+        "SchemaChangePolicy": {
+            "UpdateBehavior": "LOG",
+            "DeleteBehavior": "LOG"
+        },
+        "LineageConfiguration": {
+            "CrawlerLineageSettings": "DISABLE"
+        },
+                "State": "READY",
+        "CrawlElapsedTime": 0,
+        "CreationTime": "2021-06-18T14:05:21-07:00",
+        "LastUpdated": "2021-06-18T14:06:36-07:00",
+        "LastCrawl": {
+            "Status": "SUCCEEDED",
+            "LogGroup": "/aws-glue/crawlers",
+            "LogStream": "message-delivery-crawler",
+            "MessagePrefix": "c5f6ad8a-fa01-409a-9fd8-3351b18b177b",
+            "StartTime": "2021-06-18T14:05:29-07:00"
+        },
+        "Version": 2
+    }
+}
+
 describe pubrecord
 
 eventid             	string              	from deserializer   
