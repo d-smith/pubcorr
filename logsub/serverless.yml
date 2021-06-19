@@ -11,9 +11,11 @@ functions:
     handler: logprocessor.handler
     events:
       - cloudwatchLog:
-          logGroup: '/aws/lambda/wrap-and-pub-${opt:stage, self:provider.stage}-wrapPub'
-          filter: 'PublishContext'
+          #logGroup: '/aws/lambda/wrap-and-pub-${opt:stage, self:provider.stage}-wrapPub'
+          logGroup: 'sns/us-east-1/#{AWS::AccountId}/t1-dev/Failure'
+          #filter: 'PublishContext'
 
 
 
- 
+plugins:
+  - serverless-pseudo-parameters
