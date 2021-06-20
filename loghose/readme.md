@@ -4,6 +4,8 @@ Serverless project to send data to s3 via a firehose configured with a transform
 
 sls deploy --stage dev
 
+For initial testing you can put data directly via the CLI. You may want to purge the bucket after doing this before crawling with glue...
+
 ```
 $ aws firehose list-delivery-streams
 {
@@ -20,9 +22,15 @@ aws firehose put-record \
  --record '{"Data":"dGhpcyBpcyBhIHRlc3QK"}'
 ```
 
+For local invocation with a representative event:
+
+```
 serverless invoke local --function transform --path ./logevent.json 
+```
 
+Crawling the bucket - set up a crawler like this:
 
+```
 aws glue get-crawler --name message-delivery-crawler
 
 {
@@ -67,7 +75,11 @@ aws glue get-crawler --name message-delivery-crawler
         "Version": 2
     }
 }
+```
 
+After crawling the bucket (after landing data), a table with the following structure is available:
+
+```
 describe pubrecord
 
 eventid             	string              	from deserializer   
@@ -83,7 +95,11 @@ day                 	string
 year                	string              	                    
 month               	string              	                    
 day                 	string       
+```
 
+Which can be queries...
+
+```
 select * from pubrecord limit 3
 
 1   f387483f-329d-4d0a-a6aa-39e3672f6ed1	eb075dd4-c058-5819-b441-0493cbda57f2	t1	2021	06	18
@@ -96,4 +112,4 @@ Results
 eventid	eventtype
 eventid	eventtype
 1	f387483f-329d-4d0a-a6aa-39e3672f6ed1	t1
-
+```
