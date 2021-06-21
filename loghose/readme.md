@@ -1,5 +1,11 @@
 # loghose
 
+Take cloudwatch log entries and distill the event logging context into s3 json lines records that look akin to:
+
+```
+{"EventId":"43c42d26-bccf-4e98-b240-6bb09c1a5e6c","MessageId":"9662da00-dffa-5485-b865-8346248cd087","EventType":"t1"}
+```
+
 Serverless project to send data to s3 via a firehose configured with a transform function.
 
 sls deploy --stage dev
