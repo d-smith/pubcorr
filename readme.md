@@ -35,7 +35,7 @@ START RequestId: e710c02f-9a7a-4046-846e-9e0194541208 Version: $LATEST
 2021-06-19 09:02:03.429 (-07:00)        e710c02f-9a7a-4046-846e-9e0194541208    INFO    Event Data: {
   "messageType": "DATA_MESSAGE",
   "owner": "427848627088",
-  "logGroup": "sns/us-east-1/427848627088/t1-dev/Failure",
+  "logGroup": "sns/us-east-1/xxxx/t1-dev/Failure",
   "logStream": "8aa50655-1d04-4420-8f5c-75c18e3f8a43",
   "subscriptionFilters": [
     "log-filter-sub-dev-LogProcessorLogsSubscriptionFilterCloudWatchLog1-1MYI5N3R789KV"

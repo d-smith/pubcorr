@@ -17,8 +17,8 @@ provider:
     - wp-api-keyi-${opt:stage, self:provider.stage}
   usagePlan:
     throttle:
-      burstLimit: 10
-      rateLimit: 1
+      burstLimit: 20
+      rateLimit: 10
 
 functions:
   wrapPub:
