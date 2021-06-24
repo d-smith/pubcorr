@@ -1,0 +1,64 @@
+service: wrap-and-pub2
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs12.x
+  environment:
+    TOPIC_NAME: t2-${opt:stage, self:provider.stage}
+    TOPIC_ARN: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:t2-dev
+    DYNAMODB_TABLE: wp2-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource: ${self:provider.environment.TOPIC_ARN}
+    - Effect: Allow
+      Action: 
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+  apiKeys:
+    - wp-api-keyi-${opt:stage, self:provider.stage}
+  usagePlan:
+    throttle:
+      burstLimit: 20
+      rateLimit: 10
+
+functions:
+  wrapPub:
+    handler: wp.wrapPub
+    events:
+      - http:
+          path: wp/{topic}
+          method: post
+          private: true
+  
+resources:
+  Resources:
+    corrTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    sampleTopic:
+      Type: 'AWS::SNS::Topic'
+      Properties:
+        TopicName: ${self:provider.environment.TOPIC_NAME}
+
+ 
+
+plugins:
+  - serverless-pseudo-parameters
