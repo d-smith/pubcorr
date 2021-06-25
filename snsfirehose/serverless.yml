@@ -1,0 +1,31 @@
+service: snshose
+
+custom:
+  stage: ${opt:stage, 'dev'}
+  serviceName: snshose
+  S3BucketNameForFirehoseDestination: ${self:service}-${self:custom.stage}-snshose-destination
+  Topic: ${self:service}-${self:custom.stage}-topic
+
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs12.x
+
+
+functions:
+  transform:
+    handler: handler.transform
+    name: ${self:service}-${self:custom.stage}-snshose-transform-lambda
+    timeout: 60
+  
+
+
+resources:
+  - ${file(resources/s3-bucket.yml)}
+  - ${file(resources/firehose.yml)}
+  - ${file(resources/topics.yml)}
+
+ 
+plugins:
+  - serverless-pseudo-parameters

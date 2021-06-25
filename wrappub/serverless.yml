@@ -7,12 +7,12 @@ provider:
   environment:
     TOPIC_NAME: t1-${opt:stage, self:provider.stage}
     QUEUE_NAME: q1-${opt:stage, self:provider.stage}
-    TOPIC_ARN: arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:t1-dev
+    TOPIC_ARN_BASE: 'arn:aws:sns:#{AWS::Region}:#{AWS::AccountId}:'
   iamRoleStatements:
     - Effect: Allow
       Action:
         - sns:Publish
-      Resource: ${self:provider.environment.TOPIC_ARN}
+      Resource: ${self:provider.environment.TOPIC_ARN_BASE}*
   apiKeys:
     - wp-api-keyi-${opt:stage, self:provider.stage}
   usagePlan:

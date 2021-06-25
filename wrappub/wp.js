@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const sns = new AWS.SNS();
 const { v4: uuidv4 } = require('uuid');
 
-let topic_arn = process.env.TOPIC_ARN;
+let topic_arn_base = process.env.TOPIC_ARN_BASE;
 
 const winston = require('winston');
 const logger = winston.createLogger({
@@ -30,7 +30,7 @@ const wrapPub = async (event) => {
     try {
         let snsParams = {
             Message: JSON.stringify(cloudEvent),
-            TopicArn: topic_arn
+            TopicArn: topic_arn_base + cloudEvent.type
         };
 
         let response = await sns.publish(snsParams).promise();

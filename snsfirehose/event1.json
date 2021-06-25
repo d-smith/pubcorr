@@ -1,0 +1,12 @@
+{
+    "invocationId": "6d312ee9-ab7f-4c31-bdaf-6c34b3e93e69",
+    "deliveryStreamArn": "arn:aws:firehose:us-east-1:xxxx:deliverystream/snshose-dev-firehose-delivery-stream",
+    "region": "us-east-1",
+    "records": [
+        {
+            "recordId": "49619552570124505805228756655900542782161551847881441282000000",
+            "approximateArrivalTimestamp": 1624652545473,
+            "data": "eyJUeXBlIjoiTm90aWZpY2F0aW9uIiwiTWVzc2FnZUlkIjoiOWY4NDY3MjctYTk1OC01NTkwLWFjYWUtM2U3N2UyZmE0Yzg1IiwiVG9waWNBcm4iOiJhcm46YXdzOnNuczp1cy1lYXN0LTE6NDI3ODQ4NjI3MDg4OnNuc2hvc2UtZGV2LXRvcGljIiwiTWVzc2FnZSI6IntcImlkXCI6XCI0ZDUyOGYyYy03OWM2LTQ2Y2MtOTIzZS1iM2EwMDM1MmFmZjVcIixcInNvdXJjZVwiOlwieW91ciBtYW1hXCIsXCJzcGVjdmVyc2lvblwiOlwiMS4wXCIsXCJ0eXBlXCI6XCJzbnNob3NlLWRldi10b3BpY1wiLFwiZGF0YVwiOntcImZvb1wiOnRydWV9LFwidGltZVwiOlwiMjAyMS0wNi0yNVQyMToyMzo0Ni4yMjFaXCJ9IiwiVGltZXN0YW1wIjoiMjAyMS0wNi0yNVQyMToyMzo0Ni4yNDFaIiwiVW5zdWJzY3JpYmVVUkwiOiJodHRwczovL3Nucy51cy1lYXN0LTEuYW1hem9uYXdzLmNvbS8/QWN0aW9uPVVuc3Vic2NyaWJlJlN1YnNjcmlwdGlvbkFybj1hcm46YXdzOnNuczp1cy1lYXN0LTE6NDI3ODQ4NjI3MDg4OnNuc2hvc2UtZGV2LXRvcGljOjVmNmRjN2VmLWU4YTYtNGJlYi1iNzhkLWI2MWQyMjNhZmM0ZCJ9Cg=="
+        }
+    ]
+}

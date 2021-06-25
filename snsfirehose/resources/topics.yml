@@ -1,0 +1,44 @@
+Resources:
+  appTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: ${self:custom.Topic}
+
+  topicStreamSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: 
+        Ref: appTopic
+      Endpoint: 
+        Fn::GetAtt: FirehoseDeliveryStream.Arn
+      Protocol: firehose
+      SubscriptionRoleArn: 
+        Fn::GetAtt: topicStreamSubscriptionRole.Arn
+
+
+  topicStreamSubscriptionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - sns.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Policies:
+      - PolicyName: SNSKinesisFirehoseAccessPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - firehose:DescribeDeliveryStream
+            - firehose:ListDeliveryStreams
+            - firehose:ListTagsForDeliveryStream
+            - firehose:PutRecord
+            - firehose:PutRecordBatch
+            Effect: Allow
+            Resource:
+            - Fn::GetAtt: FirehoseDeliveryStream.Arn
