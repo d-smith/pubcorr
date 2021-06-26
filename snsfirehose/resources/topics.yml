@@ -12,6 +12,7 @@ Resources:
       Endpoint: 
         Fn::GetAtt: FirehoseDeliveryStream.Arn
       Protocol: firehose
+      RawMessageDelivery: false
       SubscriptionRoleArn: 
         Fn::GetAtt: topicStreamSubscriptionRole.Arn
 
